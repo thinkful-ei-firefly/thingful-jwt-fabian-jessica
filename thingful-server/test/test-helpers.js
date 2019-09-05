@@ -1,4 +1,5 @@
 const bcrypt = require('bcryptjs');
+const AuthService = require('../src/auth/auth-service');
 
 function makeUsersArray() {
   return [
@@ -268,6 +269,14 @@ function seedUsers(db, users) {
      )
  }
 
+ function makeAuthHeader(user) {
+   const sub = user.user_name;
+   const payload = { user_id: user.user_name};
+   return  `Bearer ${AuthService.createJWT(sub, payload)}`;
+  //const token = Buffer.from(`${user.user_name}:${user.password}`).toString('base64')
+  //return `Basic ${token}`
+}
+
 module.exports = {
   makeUsersArray,
   makeThingsArray,
@@ -280,5 +289,6 @@ module.exports = {
   cleanTables,
   seedThingsTables,
   seedMaliciousThing,
+  makeAuthHeader,
   seedUsers,
 }

@@ -1,6 +1,6 @@
 const express = require('express')
 const ThingsService = require('./things-service')
-const authenticateToken = require('../authenticateToken')
+const authenticateTokenJwt = require('../authenticateTokenJwt')
 
 const thingsRouter = express.Router()
 
@@ -17,14 +17,14 @@ thingsRouter
 thingsRouter
   .route('/:thing_id')
   .all(checkThingExists)
-  .all(authenticateToken)
+  .all(authenticateTokenJwt)
   .get((req, res) => {
     res.json(ThingsService.serializeThing(res.thing))
   })
 
 thingsRouter.route('/:thing_id/reviews/')
   .all(checkThingExists)
-  .all(authenticateToken)
+  .all(authenticateTokenJwt)
   .get((req, res, next) => {
     ThingsService.getReviewsForThing(
       req.app.get('db'),
